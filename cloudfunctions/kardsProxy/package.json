@@ -1,0 +1,9 @@
+{
+  "name": "kardsProxy",
+  "version": "1.0.0",
+  "description": "KARDS 卡组存档 - 卡牌数据与卡图代理云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

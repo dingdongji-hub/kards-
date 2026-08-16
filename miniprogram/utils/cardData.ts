@@ -3,6 +3,8 @@ import {
   CARD_PAGE_SIZE,
   CARD_CACHE_PREFIX,
   CARD_CACHE_CHUNKS_KEY,
+  CLOUD_ENV,
+  CLOUD_FUNC,
 } from '../config';
 import { Card, CardIndex } from './types';
 
@@ -13,7 +15,13 @@ interface PageResult {
   meta: { total: number; page: number; limit: number; total_pages: number };
 }
 
-function requestPage(page: number): Promise<PageResult> {
+// 云开发是否已配置（占位符视为未配置）
+function cloudReady(): boolean {
+  return !!(wx.cloud && CLOUD_ENV && CLOUD_ENV !== 'YOUR_CLOUD_ENV_ID');
+}
+
+// 直连 KD（仅开发期 urlCheck:false 时可用）
+function requestDirect(page: number): Promise<PageResult> {
   return new Promise((resolve, reject) => {
     wx.request({
       url: CARD_API,
@@ -28,6 +36,28 @@ function requestPage(page: number): Promise<PageResult> {
       fail: (err: any) => reject(err),
     });
   });
+}
+
+// 通过云函数代理（上线后走这条路，绕过域名白名单限制）
+function requestViaCloud(page: number): Promise<PageResult> {
+  return wx.cloud
+    .callFunction({
+      name: CLOUD_FUNC,
+      data: { action: 'cards', page },
+    })
+    .then((res: any) => {
+      const r = res && res.result;
+      if (r && r.ok && r.data) return r.data as PageResult;
+      throw new Error('cloud proxy failed');
+    });
+}
+
+function requestPage(page: number): Promise<PageResult> {
+  if (cloudReady()) {
+    // 云函数失败时回退直连（开发期兜底）
+    return requestViaCloud(page).catch(() => requestDirect(page));
+  }
+  return requestDirect(page);
 }
 
 function addCards(index: CardIndex, cards: Card[]): void {
@@ -116,4 +146,26 @@ export function clearCardCache(): void {
     // ignore
   }
   cachedIndex = null;
+}
+
+/**
+ * 获取卡图。
+ * 上线后通过云函数代理下载卡图并返回 base64（image 组件可直接显示）；
+ * 开发期（未配置云开发）直接返回原始代理 URL。
+ */
+export async function getCardImage(proxyUrl: string): Promise<string> {
+  if (!proxyUrl) return '';
+  if (cloudReady()) {
+    try {
+      const res: any = await wx.cloud.callFunction({
+        name: CLOUD_FUNC,
+        data: { action: 'image', url: proxyUrl },
+      });
+      const r = res && res.result;
+      if (r && r.ok && r.data) return r.data;
+    } catch (e) {
+      // 失败回退直连
+    }
+  }
+  return proxyUrl;
 }

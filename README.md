@@ -14,6 +14,8 @@
 ├── package.json
 ├── typings/                 # 最小全局类型声明
 ├── docs/技术方案.md
+├── cloudfunctions/          # 云函数（上线代理用）
+│   └── kardsProxy/          # 卡牌数据 + 卡图代理
 └── miniprogram/             # 小程序源码
     ├── app.ts / app.json / app.wxss
     ├── config.ts            # KD 接口、阵营映射
@@ -38,10 +40,21 @@
    - `project.config.json` 里默认写的是 `touristappid`，可改成你自己的 AppID。
 4. 首次打开会自动拉取卡牌数据（约 1613 张，来自 KARDS DECKER 公开接口），之后缓存到本地。
 
-## 开发期网络说明
+## 上线发布（云开发代理）
 
-- 卡牌数据与卡图来自 `https://1939.giaory.xyz`。
-- 开发阶段已在 `project.config.json` 中关闭 `urlCheck`，真机预览/上线前需在 **微信公众平台 → 开发管理 → 开发设置 → 服务器域名** 中，把 `https://1939.giaory.xyz` 加入 request 合法域名（卡图为 image 域名）。
+卡牌数据与卡图来自 `https://1939.giaory.xyz`，该域名未备案，**无法直接配置为小程序合法域名**。因此上线采用「云开发代理」：小程序请求云函数，云函数在微信服务端转发到该域名，绕过域名白名单限制。
+
+### 部署步骤
+
+1. 微信开发者工具 →「云开发」→ 开通并创建一个环境，复制「环境 ID」。
+2. 把 `miniprogram/config.ts` 里的 `CLOUD_ENV` 改成你的环境 ID。
+3. 在工具左侧 `cloudfunctions/kardsProxy` 上右键 →「上传并部署：云端安装依赖」。
+4. 重新编译小程序，卡牌数据与卡图即改走云函数代理；提交审核无需再配置 `1939.giaory.xyz` 域名。
+
+### 开发期（未配置云开发时）
+
+- `CLOUD_ENV` 保持占位符 `YOUR_CLOUD_ENV_ID` 时，前端自动回退为**直连** `1939.giaory.xyz`。
+- 此时需在工具「详情 → 本地设置」勾选「不校验合法域名」。
 
 ## 合规
 

@@ -1,5 +1,5 @@
 import { getDeckById, removeDeck } from '../../utils/storage';
-import { getCardIndex } from '../../utils/cardData';
+import { getCardIndex, getCardImage } from '../../utils/cardData';
 import { FACTION_NAME_ZH } from '../../config';
 
 interface CardView {
@@ -9,7 +9,8 @@ interface CardView {
   faction: string;
   type: string;
   kredits: number;
-  image: string;
+  image: string; // 实际展示用：base64 或直连 URL（懒加载填充）
+  imageUrl: string; // KD 原始代理 URL
 }
 
 interface CurveItem {
@@ -55,7 +56,8 @@ Page({
           faction: card ? card.faction : '',
           type: card ? card.type : '',
           kredits: card ? card.kredits : 0,
-          image: card ? card.image_proxy_url : '',
+          image: '',
+          imageUrl: card ? card.image_proxy_url : '',
         };
       });
       cards.sort((a, b) => a.kredits - b.kredits || a.name.localeCompare(b.name));
@@ -72,9 +74,32 @@ Page({
         maxCost,
         totalCards: cards.reduce((s, c) => s + c.count, 0),
       });
+      this.loadCardImages(cards);
     } catch (e) {
       wx.showToast({ title: '卡牌数据加载失败', icon: 'none' });
     }
+  },
+
+  // 通过云函数按需加载卡图（上线后卡图域名未备案，走代理转 base64）
+  loadCardImages(cards: CardView[]) {
+    let cursor = 0;
+    const workers = Array.from({ length: 5 }, async () => {
+      while (true) {
+        const i = cursor++;
+        if (i >= cards.length) break;
+        const c = cards[i];
+        if (!c.imageUrl) continue;
+        try {
+          const img = await getCardImage(c.imageUrl);
+          if (img) {
+            this.setData({ [`cards[${i}].image`]: img });
+          }
+        } catch (e) {
+          // 单张卡图失败不影响整体
+        }
+      }
+    });
+    Promise.all(workers).catch(() => {});
   },
 
   copyCode() {
