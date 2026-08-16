@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="card">
+    <view class="title">KARDS 卡组存档</view>
+    <view class="version text-dim">版本 {{version}}</view>
+    <view class="desc">
+      这是一个<b>非官方</b>工具，用于把超出游戏内卡组槽位上限的多余卡组，以粘贴卡组代码的方式一键存档、快速查找。
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section">数据来源</view>
+    <view class="desc">
+      卡牌中文数据与卡图由 <b>KARDS DECKER</b> 提供（公开接口）。
+    </view>
+    <view class="link" bindtap="copySource">https://1939.giaory.xyz（点击复制）</view>
+  </view>
+
+  <view class="card">
+    <view class="section">版权声明</view>
+    <view class="desc">
+      KARDS 及其卡牌素材版权归 <b>1939 Games</b> 所有。本小程序遵守其 Community Content Policy，仅供玩家个人学习、交流与非商业用途。
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section">隐私说明</view>
+    <view class="desc">
+      你的卡组数据仅保存在<b>本机</b>微信小程序本地存储中，不会上传到任何服务器。
+    </view>
+  </view>
+</view>

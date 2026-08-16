@@ -1,0 +1,66 @@
+<view class="container">
+  <view class="search-box">
+    <input
+      class="search-input"
+      placeholder="搜索卡组名 / 标签"
+      value="{{keyword}}"
+      bindinput="onKeywordInput"
+      confirm-type="search"
+    />
+  </view>
+
+  <view class="filter-row">
+    <picker
+      class="filter-picker"
+      range="{{factionOptions}}"
+      range-key="name"
+      value="{{mainFactionIndex}}"
+      bindchange="onMainFactionChange"
+    >
+      <view class="filter-pill {{mainFaction ? 'active' : ''}}">主国：{{factionOptions[mainFactionIndex].name}}</view>
+    </picker>
+    <picker
+      class="filter-picker"
+      range="{{factionOptions}}"
+      range-key="name"
+      value="{{allyFactionIndex}}"
+      bindchange="onAllyFactionChange"
+    >
+      <view class="filter-pill {{allyFaction ? 'active' : ''}}">盟国：{{factionOptions[allyFactionIndex].name}}</view>
+    </picker>
+    <view class="filter-clear" bindtap="clearFilters">清除</view>
+  </view>
+
+  <view wx:if="{{decks.length === 0}}" class="empty">
+    <text class="empty-text">还没有卡组\n点击下方「添加卡组」粘贴代码即可存档</text>
+  </view>
+
+  <view
+    wx:for="{{decks}}"
+    wx:key="id"
+    class="card deck-card"
+    data-id="{{item.id}}"
+    bindtap="goDetail"
+  >
+    <view class="deck-head">
+      <text class="deck-name">{{item.name}}</text>
+      <text class="deck-delete" data-id="{{item.id}}" catchtap="onDelete">删除</text>
+    </view>
+    <view class="deck-meta">
+      <text class="deck-faction">{{item.mainFactionName}}{{item.allyFactionName ? ' · ' + item.allyFactionName : ''}}</text>
+      <text class="text-dim">{{item.cardCount}} 张</text>
+    </view>
+    <view class="deck-tags" wx:if="{{item.tags.length > 0}}">
+      <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="tag">{{tag}}</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="btn-primary add-btn" bindtap="goAdd">＋ 添加卡组</button>
+    <view class="backup-row">
+      <view class="backup-btn" bindtap="exportBackup">导出备份</view>
+      <view class="backup-btn" bindtap="importBackup">导入备份</view>
+    </view>
+    <view class="about-link" bindtap="goAbout">关于 / 数据来源</view>
+  </view>
+</view>

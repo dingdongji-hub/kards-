@@ -1,0 +1,30 @@
+.title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.version {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+}
+
+.section {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #c9a24b;
+  margin-bottom: 10rpx;
+}
+
+.desc {
+  font-size: 26rpx;
+  color: #b8b8cc;
+  line-height: 1.7;
+}
+
+.link {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #6fa8dc;
+  word-break: break-all;
+}

@@ -1,0 +1,90 @@
+.section-title {
+  font-size: 26rpx;
+  color: #8a8aa0;
+  margin: 24rpx 0 12rpx;
+}
+
+.code-input {
+  width: 100%;
+  height: 240rpx;
+  background: #1e1e33;
+  border: 1rpx solid #2c2c46;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  color: #e6e6e6;
+  font-size: 26rpx;
+  font-family: Menlo, Consolas, monospace;
+  line-height: 1.6;
+}
+
+.parse-btn {
+  margin-top: 20rpx;
+  width: 100%;
+}
+
+.error {
+  color: #e06c6c;
+  font-size: 26rpx;
+  margin-top: 16rpx;
+}
+
+.preview-card {
+  margin-top: 24rpx;
+}
+
+.preview-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-title {
+  color: #7ec87e;
+  font-weight: 600;
+  font-size: 30rpx;
+}
+
+.preview-faction {
+  color: #c9a24b;
+  font-size: 26rpx;
+}
+
+.preview-meta {
+  margin-top: 10rpx;
+}
+
+.name-input {
+  background: #1e1e33;
+  border: 1rpx solid #2c2c46;
+  border-radius: 12rpx;
+  padding: 16rpx 24rpx;
+  color: #e6e6e6;
+  font-size: 28rpx;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag {
+  background: #2c2c46;
+  color: #b8b8cc;
+  border-radius: 10rpx;
+  padding: 10rpx 24rpx;
+  font-size: 26rpx;
+  border: 1rpx solid transparent;
+}
+
+.tag-active {
+  background: #2a2414;
+  color: #c9a24b;
+  border-color: #c9a24b;
+}
+
+.save-btn {
+  margin-top: 40rpx;
+  width: 100%;
+}

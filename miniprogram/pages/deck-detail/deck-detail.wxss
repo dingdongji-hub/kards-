@@ -1,0 +1,115 @@
+.hero-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.hero-faction {
+  color: #c9a24b;
+  font-size: 28rpx;
+  margin-top: 8rpx;
+}
+
+.hero-meta {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  color: #8a8aa0;
+  margin-bottom: 16rpx;
+}
+
+.curve {
+  display: flex;
+  align-items: flex-end;
+  gap: 6rpx;
+  height: 140rpx;
+}
+
+.curve-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.curve-bar {
+  width: 60%;
+  min-height: 4rpx;
+  background: #c9a24b;
+  border-radius: 4rpx 4rpx 0 0;
+}
+
+.curve-label {
+  font-size: 18rpx;
+  color: #8a8aa0;
+  margin-top: 4rpx;
+}
+
+.curve-count {
+  font-size: 18rpx;
+  color: #b8b8cc;
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #26263c;
+}
+
+.card-row:last-child {
+  border-bottom: none;
+}
+
+.card-img {
+  width: 64rpx;
+  height: 88rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+
+.card-img-placeholder {
+  background: #2c2c46;
+}
+
+.card-info {
+  flex: 1;
+  margin-left: 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-name {
+  font-size: 28rpx;
+  color: #e6e6e6;
+}
+
+.card-sub {
+  font-size: 22rpx;
+  margin-top: 4rpx;
+}
+
+.card-count {
+  color: #c9a24b;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.actions {
+  margin-top: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.btn-danger {
+  background: #3a1f24;
+  color: #e06c6c;
+  border-radius: 12rpx;
+  border: 1rpx solid #6c3a3a;
+}

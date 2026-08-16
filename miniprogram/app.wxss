@@ -1,0 +1,52 @@
+/* 全局样式：暗色军事风 */
+page {
+  background-color: #0f0f1a;
+  color: #e6e6e6;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+/* 通用容器 */
+.container {
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+/* 通用卡片 */
+.card {
+  background: #1e1e33;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border: 1rpx solid #2c2c46;
+}
+
+/* 主按钮 */
+.btn-primary {
+  background: #c9a24b;
+  color: #1a1a2e;
+  border-radius: 12rpx;
+  font-weight: 600;
+}
+.btn-primary[disabled] {
+  background: #4a4a5e;
+  color: #888;
+}
+
+/* 次要按钮 */
+.btn-ghost {
+  background: transparent;
+  color: #c9a24b;
+  border: 1rpx solid #c9a24b;
+  border-radius: 12rpx;
+}
+
+/* 文本 */
+.text-dim {
+  color: #8a8aa0;
+}
+.text-gold {
+  color: #c9a24b;
+}

@@ -1,0 +1,145 @@
+.search-box {
+  margin-bottom: 20rpx;
+}
+
+.search-input {
+  background: #1e1e33;
+  border: 1rpx solid #2c2c46;
+  border-radius: 12rpx;
+  padding: 16rpx 24rpx;
+  color: #e6e6e6;
+  font-size: 28rpx;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+  flex-wrap: wrap;
+}
+
+.filter-picker {
+  flex: 1;
+  min-width: 200rpx;
+}
+
+.filter-pill {
+  background: #1e1e33;
+  border: 1rpx solid #2c2c46;
+  border-radius: 12rpx;
+  padding: 12rpx 20rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #b8b8cc;
+}
+
+.filter-pill.active {
+  border-color: #c9a24b;
+  color: #c9a24b;
+  background: #2a2414;
+}
+
+.filter-clear {
+  color: #8a8aa0;
+  font-size: 26rpx;
+  padding: 12rpx 8rpx;
+}
+
+.empty {
+  padding: 120rpx 40rpx;
+  text-align: center;
+}
+
+.empty-text {
+  color: #6a6a80;
+  font-size: 28rpx;
+  white-space: pre-line;
+  line-height: 1.8;
+}
+
+.deck-card {
+  transition: background 0.15s;
+}
+
+.deck-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deck-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #f0f0f0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deck-delete {
+  color: #d66;
+  font-size: 24rpx;
+  padding: 8rpx 16rpx;
+}
+
+.deck-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12rpx;
+  font-size: 26rpx;
+}
+
+.deck-faction {
+  color: #c9a24b;
+}
+
+.deck-tags {
+  margin-top: 12rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.tag {
+  background: #2c2c46;
+  color: #b8b8cc;
+  border-radius: 8rpx;
+  padding: 4rpx 14rpx;
+  font-size: 22rpx;
+}
+
+.footer {
+  margin-top: 40rpx;
+  padding-bottom: 40rpx;
+}
+
+.add-btn {
+  width: 100%;
+}
+
+.backup-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.backup-btn {
+  flex: 1;
+  text-align: center;
+  color: #b8b8cc;
+  background: #1e1e33;
+  border: 1rpx solid #2c2c46;
+  border-radius: 12rpx;
+  padding: 14rpx 0;
+  font-size: 26rpx;
+}
+
+.about-link {
+  text-align: center;
+  color: #8a8aa0;
+  font-size: 24rpx;
+  margin-top: 24rpx;
+  padding: 12rpx;
+}

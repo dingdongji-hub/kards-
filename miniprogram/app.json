@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/decks/decks",
+    "pages/deck-edit/deck-edit",
+    "pages/deck-detail/deck-detail",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationBarTitleText": "KARDS 卡组存档",
+    "navigationBarBackgroundColor": "#1a1a2e",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0f0f1a",
+    "backgroundTextStyle": "dark"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

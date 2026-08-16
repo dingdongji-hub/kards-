@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="section-title">卡组代码</view>
+  <textarea
+    class="code-input"
+    placeholder="在游戏内复制卡组代码，粘贴到这里"
+    value="{{deckCode}}"
+    bindinput="onCodeInput"
+    maxlength="-1"
+  />
+  <button
+    class="btn-primary parse-btn"
+    bindtap="onParse"
+    loading="{{parsing}}"
+    disabled="{{parsing}}"
+  >{{parsing ? '解析中…' : '解析卡组'}}</button>
+  <view wx:if="{{parseError}}" class="error">{{parseError}}</view>
+
+  <block wx:if="{{preview}}">
+    <view class="card preview-card">
+      <view class="preview-head">
+        <text class="preview-title">解析成功</text>
+        <text class="preview-faction">{{preview.mainFactionName}}{{preview.allyFactionName ? ' · ' + preview.allyFactionName : ''}}</text>
+      </view>
+      <view class="preview-meta">
+        <text class="text-dim">共 {{preview.totalCards}} 张卡牌</text>
+      </view>
+    </view>
+
+    <view class="section-title">卡组名称</view>
+    <input
+      class="name-input"
+      placeholder="给卡组起个名字"
+      value="{{name}}"
+      bindinput="onNameInput"
+    />
+
+    <view class="section-title">标签</view>
+    <view class="tag-list">
+      <text
+        wx:for="{{tagOptions}}"
+        wx:key="name"
+        data-tag="{{item.name}}"
+        bindtap="toggleTag"
+        class="tag {{item.selected ? 'tag-active' : ''}}"
+      >{{item.name}}</text>
+    </view>
+
+    <button class="btn-primary save-btn" bindtap="onSave">保存卡组</button>
+  </block>
+</view>

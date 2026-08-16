@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="card hero">
+    <view class="hero-name">{{deck.name}}</view>
+    <view class="hero-faction">{{mainFactionName}}{{allyFactionName ? ' · ' + allyFactionName : ''}}</view>
+    <view class="hero-meta text-dim">共 {{totalCards}} 张卡牌</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">费用曲线</view>
+    <view class="curve">
+      <view wx:for="{{costCurve}}" wx:key="cost" class="curve-col">
+        <view class="curve-bar" style="height: {{item.count / maxCost * 100}}rpx;"></view>
+        <text class="curve-label">{{item.cost}}</text>
+        <text class="curve-count">{{item.count}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">卡牌列表</view>
+    <view wx:for="{{cards}}" wx:key="import_id" class="card-row">
+      <image
+        wx:if="{{item.image}}"
+        class="card-img"
+        src="{{item.image}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view wx:else class="card-img card-img-placeholder"></view>
+      <view class="card-info">
+        <text class="card-name">{{item.name}}</text>
+        <text class="text-dim card-sub">费用 {{item.kredits}}</text>
+      </view>
+      <text class="card-count">×{{item.count}}</text>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="btn-primary" bindtap="copyCode">复制卡组代码</button>
+    <button class="btn-ghost" bindtap="goEdit">编辑</button>
+    <button class="btn-danger" bindtap="onDelete">删除</button>
+  </view>
+</view>
