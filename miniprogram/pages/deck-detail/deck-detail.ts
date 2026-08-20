@@ -9,6 +9,7 @@ interface CardView {
   faction: string;
   type: string;
   kredits: number;
+  rarity: string;
   image: string; // 实际展示用：base64 或直连 URL（懒加载填充）
   imageUrl: string; // KD 原始代理 URL
 }
@@ -24,6 +25,7 @@ Page({
     cards: [] as CardView[],
     costCurve: [] as CurveItem[],
     maxCost: 1,
+    rarityList: [] as { key: string; name: string; count: number; cls: string }[],
     totalCards: 0,
     mainFactionName: '',
     allyFactionName: '',
@@ -56,6 +58,7 @@ Page({
           faction: card ? card.faction : '',
           type: card ? card.type : '',
           kredits: card ? card.kredits : 0,
+          rarity: card ? card.rarity : '',
           image: '',
           imageUrl: card ? card.image_proxy_url : '',
         };
@@ -68,10 +71,23 @@ Page({
       });
       const maxCost = Math.max(1, ...curve.map((c) => c.count));
 
+      // 稀有度统计（普通/限定/特殊/精英）
+      const rarityCount: Record<string, number> = { Standard: 0, Limited: 0, Special: 0, Elite: 0 };
+      cards.forEach((c) => {
+        if (rarityCount[c.rarity] !== undefined) rarityCount[c.rarity] += c.count;
+      });
+      const rarityList = [
+        { key: 'Standard', name: '普通', count: rarityCount.Standard, cls: 'std' },
+        { key: 'Limited', name: '限定', count: rarityCount.Limited, cls: 'ltd' },
+        { key: 'Special', name: '特殊', count: rarityCount.Special, cls: 'spc' },
+        { key: 'Elite', name: '精英', count: rarityCount.Elite, cls: 'elt' },
+      ];
+
       this.setData({
         cards,
         costCurve: curve,
         maxCost,
+        rarityList,
         totalCards: cards.reduce((s, c) => s + c.count, 0),
       });
       this.loadCardImages(cards);

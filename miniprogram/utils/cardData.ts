@@ -9,6 +9,8 @@ import {
 import { Card, CardIndex } from './types';
 
 const CHUNK_SIZE = 500; // 每片缓存 500 张，规避 storage 单 key 大小限制
+const CLOUD_BATCH = 20; // 云函数单次批量拉取的最大页数（约 1000 张，控制返回体积 < 1MB）
+const DIRECT_CONCURRENCY = 6; // 直连模式的并发数
 
 interface PageResult {
   data: Card[];
@@ -38,26 +40,39 @@ function requestDirect(page: number): Promise<PageResult> {
   });
 }
 
-// 通过云函数代理（上线后走这条路，绕过域名白名单限制）
-function requestViaCloud(page: number): Promise<PageResult> {
+// 云函数批量拉取：一次调用并发拉取 pages 页并合并返回
+function requestViaCloud(page: number, pages: number): Promise<PageResult> {
   return wx.cloud
     .callFunction({
       name: CLOUD_FUNC,
-      data: { action: 'cards', page },
+      data: { action: 'cards', page, pages },
     })
     .then((res: any) => {
       const r = res && res.result;
-      if (r && r.ok && r.data) return r.data as PageResult;
+      if (r && r.ok && r.data && Array.isArray(r.data.data)) {
+        return r.data as PageResult;
+      }
       throw new Error('cloud proxy failed');
     });
 }
 
-function requestPage(page: number): Promise<PageResult> {
-  if (cloudReady()) {
-    // 云函数失败时回退直连（开发期兜底）
-    return requestViaCloud(page).catch(() => requestDirect(page));
+// 单页拉取：云函数优先，失败回退直连；整体失败重试
+async function requestPageWithRetry(page: number, retries = 2): Promise<PageResult | null> {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      if (cloudReady()) {
+        try {
+          return await requestViaCloud(page, 1);
+        } catch (e) {
+          return await requestDirect(page); // 云函数失败回退直连（开发期兜底）
+        }
+      }
+      return await requestDirect(page);
+    } catch (e) {
+      // 本轮失败，继续重试
+    }
   }
-  return requestDirect(page);
+  return null;
 }
 
 function addCards(index: CardIndex, cards: Card[]): void {
@@ -68,14 +83,37 @@ function addCards(index: CardIndex, cards: Card[]): void {
   }
 }
 
+// 拉取全量卡牌：云函数批量（每批 20 页）或直连并发（每批 6 页），单页失败不致命
 async function fetchAllCards(): Promise<CardIndex> {
   const index: CardIndex = {};
-  const first = await requestPage(1);
+  const first = await requestPageWithRetry(1);
+  if (!first) {
+    throw new Error('无法获取卡牌数据');
+  }
   addCards(index, first.data);
   const totalPages = Math.ceil(first.meta.total / CARD_PAGE_SIZE);
-  for (let page = 2; page <= totalPages; page++) {
-    const res = await requestPage(page);
-    addCards(index, res.data);
+
+  const batchSize = cloudReady() ? CLOUD_BATCH : DIRECT_CONCURRENCY;
+  for (let start = 2; start <= totalPages; start += batchSize) {
+    const pageNums: number[] = [];
+    for (let p = start; p < start + batchSize && p <= totalPages; p++) pageNums.push(p);
+
+    let results: (PageResult | null)[];
+    if (cloudReady()) {
+      // 云函数批量：一次调用拿多页
+      const batch = await requestViaCloud(start, pageNums.length).catch(() => null);
+      if (batch && Array.isArray(batch.data) && batch.data.length > 0) {
+        results = [batch];
+      } else {
+        // 批量失败：逐页并发回退
+        results = await Promise.all(pageNums.map((p) => requestPageWithRetry(p)));
+      }
+    } else {
+      results = await Promise.all(pageNums.map((p) => requestPageWithRetry(p)));
+    }
+    for (const r of results) {
+      if (r) addCards(index, r.data);
+    }
   }
   return index;
 }
@@ -113,19 +151,29 @@ function loadCachedIndex(): CardIndex | null {
 }
 
 let cachedIndex: CardIndex | null = null;
+let inflight: Promise<CardIndex> | null = null;
 
-// 初始化卡牌索引：优先读缓存，否则拉全量并缓存
-export async function initCardIndex(): Promise<CardIndex> {
-  if (cachedIndex) return cachedIndex;
-  const fromCache = loadCachedIndex();
-  if (fromCache) {
-    cachedIndex = fromCache;
-    return fromCache;
-  }
-  const index = await fetchAllCards();
-  cachedIndex = index;
-  saveIndex(index);
-  return index;
+// 初始化卡牌索引：优先读缓存，否则拉全量并缓存；
+// 并发调用共享同一 Promise（app 启动预加载与解析时请求不会重复拉取）
+export function initCardIndex(): Promise<CardIndex> {
+  if (cachedIndex) return Promise.resolve(cachedIndex);
+  if (inflight) return inflight;
+  inflight = (async () => {
+    try {
+      const fromCache = loadCachedIndex();
+      if (fromCache) {
+        cachedIndex = fromCache;
+        return fromCache;
+      }
+      const index = await fetchAllCards();
+      cachedIndex = index;
+      saveIndex(index);
+      return index;
+    } finally {
+      inflight = null; // 无论成败都清空，失败后允许下次重试
+    }
+  })();
+  return inflight;
 }
 
 // 获取卡牌索引（解析卡组代码前调用，未就绪会自动拉取）

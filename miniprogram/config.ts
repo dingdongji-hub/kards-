@@ -2,9 +2,9 @@
 export const CARD_API = 'https://1939.giaory.xyz/api/v1/cards';
 export const CARD_PAGE_SIZE = 50;
 
-// 云开发环境 ID —— 上线前替换成你自己的云环境 ID
+// 云开发环境 ID —— 已配置为你的云环境
 // 留占位符时，前端会自动回退为「直连」（仅开发期 urlCheck:false 可用）
-export const CLOUD_ENV = 'YOUR_CLOUD_ENV_ID';
+export const CLOUD_ENV: string = 'cloud1-d1gpyuebz8be371fb';
 // 云函数名（与 cloudfunctions/kardsProxy 目录对应）
 export const CLOUD_FUNC = 'kardsProxy';
 

@@ -50,9 +50,24 @@ exports.main = async (event) => {
 
     if (action === 'cards') {
       const page = Number(event.page) || 1;
-      const url = `${BASE}/api/v1/cards?limit=50&page=${page}`;
-      const { buffer } = await httpGet(url);
-      return { ok: true, data: JSON.parse(buffer.toString('utf8')) };
+      const pages = Math.min(Number(event.pages) || 1, 34); // 单次最多批量 34 页
+      const pageNumbers = [];
+      for (let i = 0; i < pages; i++) pageNumbers.push(page + i);
+      const results = await Promise.all(
+        pageNumbers.map(async (p) => {
+          try {
+            const { buffer } = await httpGet(`${BASE}/api/v1/cards?limit=50&page=${p}`);
+            return JSON.parse(buffer.toString('utf8'));
+          } catch (e) {
+            return null;
+          }
+        }),
+      );
+      const valid = results.filter((r) => r && Array.isArray(r.data) && r.data.length > 0);
+      if (valid.length === 0) return { ok: false, error: 'fetch cards failed' };
+      const data = valid.flatMap((r) => r.data);
+      const meta = valid[0].meta;
+      return { ok: true, data: { data, meta } };
     }
 
     if (action === 'image') {

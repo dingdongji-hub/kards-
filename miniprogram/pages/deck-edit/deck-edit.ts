@@ -64,8 +64,10 @@ Page({
       return;
     }
     this.setData({ parsing: true, parseError: '' });
+    wx.showLoading({ title: '加载卡牌数据中…', mask: true });
     try {
       const index = await getCardIndex();
+      wx.hideLoading();
       const result = parseDeckCode(deckCode, index);
       if (!result.ok) {
         this.setData({ parsing: false, parseError: result.error || '解析失败' });
@@ -82,6 +84,7 @@ Page({
         name: this.data.name || result.name || '',
       });
     } catch (err) {
+      wx.hideLoading();
       this.setData({ parsing: false, parseError: '卡牌数据加载失败，请检查网络后重试' });
     }
   },

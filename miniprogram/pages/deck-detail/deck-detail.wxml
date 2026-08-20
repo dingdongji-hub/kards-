@@ -17,6 +17,21 @@
   </view>
 
   <view class="card">
+    <view class="section-title">稀有度一览</view>
+    <view class="rarity-grid">
+      <view wx:for="{{rarityList}}" wx:key="key" class="rarity-cell">
+        <view class="wildcard-gem {{item.cls}}"></view>
+        <text class="rarity-text {{item.cls}}">{{item.name}}：{{item.count}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="quick-actions">
+    <button class="btn-primary" bindtap="copyCode">复制卡组代码</button>
+    <button class="btn-ghost" bindtap="goEdit">编辑</button>
+  </view>
+
+  <view class="card">
     <view class="section-title">卡牌列表</view>
     <view wx:for="{{cards}}" wx:key="import_id" class="card-row">
       <image
@@ -35,9 +50,7 @@
     </view>
   </view>
 
-  <view class="actions">
-    <button class="btn-primary" bindtap="copyCode">复制卡组代码</button>
-    <button class="btn-ghost" bindtap="goEdit">编辑</button>
-    <button class="btn-danger" bindtap="onDelete">删除</button>
+  <view class="delete-wrap">
+    <button class="btn-danger delete-btn" bindtap="onDelete">删除</button>
   </view>
 </view>

@@ -21,6 +21,67 @@
   margin-bottom: 16rpx;
 }
 
+/* 稀有度一览（2×2，与费用曲线框同宽） */
+.rarity-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rarity-cell {
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 18rpx 10rpx;
+}
+
+/* 万能牌宝石图标（CSS 绘制，不依赖外部图片） */
+.wildcard-gem {
+  width: 34rpx;
+  height: 34rpx;
+  transform: rotate(45deg);
+  border-radius: 8rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 10rpx rgba(255, 255, 255, 0.28);
+}
+
+.wildcard-gem.std {
+  background: #9e9ea0;
+}
+
+.wildcard-gem.ltd {
+  background: #f0e08a;
+}
+
+.wildcard-gem.spc {
+  background: #c8c8d0;
+}
+
+.wildcard-gem.elt {
+  background: #d4a017;
+}
+
+.rarity-text {
+  font-size: 26rpx;
+}
+
+.rarity-text.std {
+  color: #9e9ea0;
+}
+
+.rarity-text.ltd {
+  color: #f0e08a;
+}
+
+.rarity-text.spc {
+  color: #c8c8d0;
+}
+
+.rarity-text.elt {
+  color: #d4a017;
+}
+
 .curve {
   display: flex;
   align-items: flex-end;
@@ -100,11 +161,27 @@
   font-weight: 600;
 }
 
-.actions {
+/* 复制/编辑：一行等宽，放在稀有度一览下方 */
+.quick-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.quick-actions button {
+  flex: 1;
+  margin: 0;
+}
+
+/* 删除：底部居中，适中宽度 */
+.delete-wrap {
   margin-top: 32rpx;
   display: flex;
-  flex-direction: column;
-  gap: 16rpx;
+  justify-content: center;
+}
+
+.delete-btn {
+  width: 45%;
 }
 
 .btn-danger {
