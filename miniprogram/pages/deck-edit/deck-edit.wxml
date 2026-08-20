@@ -2,7 +2,7 @@
   <view class="section-title">卡组代码</view>
   <textarea
     class="code-input"
-    placeholder="在游戏内复制卡组代码，粘贴到这里"
+    placeholder="复制卡组代码，粘贴到这里"
     value="{{deckCode}}"
     bindinput="onCodeInput"
     maxlength="-1"

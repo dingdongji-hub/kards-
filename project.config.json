@@ -2,7 +2,7 @@
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
   "compileType": "miniprogram",
-  "appid": "wx7b5dc31fd0978abd",
+  "appid": "wx274a9f5259082d96",
   "projectname": "kards-deck-saver",
   "setting": {
     "useCompilerPlugins": [
@@ -32,7 +32,7 @@
       "outputPath": ""
     }
   },
-  "libVersion": "3.0.0",
+  "libVersion": "3.17.1",
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
